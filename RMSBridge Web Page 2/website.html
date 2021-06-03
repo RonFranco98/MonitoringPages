@@ -1,0 +1,96 @@
+<html>
+<head>
+<script src="data.js"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<center>
+<div id="header">LXRisk Credentials</div>
+<div id="bar">
+	<input type="text" id="search" onkeyup="onType()" placeholder="search me" >
+</div>
+
+
+
+<table id="table">
+	<tr class="tableHeader" style="background-color:white;">
+		<th>Brand</th>
+		<th>BrokerID</th>
+		<th>Server</th>
+		<th>Groups</th>
+		<th>Central Instances ID</th>
+	</tr>
+</table>
+</center>
+<script>
+	let table = document.getElementById("table")
+	let fieldsForSearch = ["name", "ID","ComputerName","groups", "CentralInstanceId"]
+	data.map(item =>{
+		let Row = document.createElement("TR");
+		Row.classList.add("TableRow")
+		let brandCell = document.createElement("TD");
+		brandCell.classList.add("brandCell")
+		brandCell.innerHTML = item.name
+		
+		let IDCell = document.createElement("TD");
+		IDCell.classList.add("IDCell")
+		IDCell.innerHTML = item.ID
+		
+		let computerCell = document.createElement("TD");
+		computerCell.classList.add("computerCell")
+		computerCell.innerHTML = item.ComputerName
+		
+		let groupsCell = document.createElement("TD");
+		groupsCell.classList.add("groupsCell")
+		groupsCell.innerHTML = item.groups
+		
+		let CentralInstanceIdCell = document.createElement("TD");
+		CentralInstanceIdCell.classList.add("CentralInstanceIdCell")
+		CentralInstanceIdCell.innerHTML = item.CentralInstanceId
+		
+		
+		Row.appendChild(brandCell)
+		Row.appendChild(IDCell)
+		Row.appendChild(computerCell)
+		Row.appendChild(groupsCell)
+		Row.appendChild(CentralInstanceIdCell)
+		table.appendChild(Row)
+	})
+	checkIfShouldDisplay = (row , text) => {
+		let brand = row.childNodes[0].innerHTML;
+		if(!brand){return false}
+		let item;
+		for(let i = 0; i < data.length; i++){
+			if(data[i].name == brand){
+				item = data[i]
+			}
+		}
+		for(let i = 0; i < fieldsForSearch.length; i++){
+			let field = fieldsForSearch[i]
+			if(!item[field] || !(typeof item[field] == "string")){continue}
+			let currValue = item[field].toLowerCase()
+			if(currValue.includes(text)){
+				return true;
+			}
+		}
+		return false;
+	}
+	rePaint = () => {
+		
+	}
+	onType = () => {
+		let text = document.getElementById("search").value.toLowerCase();
+		let nodes = document.getElementsByClassName("TableRow")
+		
+		for(let i = 0; i < nodes.length; i++){
+			let item = nodes[i]
+			if(checkIfShouldDisplay(item , text)){
+				item.style.display = "";
+			}else{
+				item.style.display = "none";
+			}
+		}
+	}
+</script>
+</body>
+</html>
